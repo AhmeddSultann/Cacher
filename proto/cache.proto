@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+package cache;
+
+// Cache service for high-frequency trading operations
+service CacheService {
+  // Get a single value by key
+  rpc Get(GetRequest) returns (GetResponse);
+  
+  // Set a single key-value pair
+  rpc Set(SetRequest) returns (SetResponse);
+  
+  // Delete a single key
+  rpc Delete(DeleteRequest) returns (DeleteResponse);
+  
+  // Clear all entries
+  rpc Clear(ClearRequest) returns (ClearResponse);
+  
+  // Get multiple values in a single request (batched for efficiency)
+  rpc BatchGet(BatchGetRequest) returns (BatchGetResponse);
+  
+  // Set multiple key-value pairs in a single request
+  rpc BatchSet(BatchSetRequest) returns (BatchSetResponse);
+  
+  // Check if a key exists
+  rpc Contains(ContainsRequest) returns (ContainsResponse);
+  
+  // Get cache statistics
+  rpc Stats(StatsRequest) returns (StatsResponse);
+}
+
+// Single get request
+message GetRequest {
+  bytes key = 1;
+}
+
+message GetResponse {
+  optional bytes value = 1;
+  bool found = 2;
+}
+
+// Single set request
+message SetRequest {
+  bytes key = 1;
+  bytes value = 2;
+  optional uint64 ttl_seconds = 3; // Optional TTL in seconds
+}
+
+message SetResponse {
+  bool success = 1;
+}
+
+// Delete request
+message DeleteRequest {
+  bytes key = 1;
+}
+
+message DeleteResponse {
+  bool existed = 1;
+}
+
+// Clear all
+message ClearRequest {}
+
+message ClearResponse {
+  uint64 items_removed = 1;
+}
+
+// Batch operations
+message BatchGetRequest {
+  repeated bytes keys = 1;
+}
+
+message BatchGetResponse {
+  repeated GetResponse values = 1;
+}
+
+message BatchSetRequest {
+  repeated SetRequest entries = 1;
+}
+
+message BatchSetResponse {
+  uint64 items_set = 1;
+}
+
+// Contains check
+message ContainsRequest {
+  bytes key = 1;
+}
+
+message ContainsResponse {
+  bool exists = 1;
+}
+
+// Statistics
+message StatsRequest {}
+
+message StatsResponse {
+  uint64 total_entries = 1;
+  uint64 hits = 2;
+  uint64 misses = 3;
+  double hit_rate = 4;
+}

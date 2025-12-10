@@ -1,0 +1,28 @@
+# Build artifacts
+/target
+**/*.rs.bk
+*.pdb
+
+# Cargo
+Cargo.lock
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+.fleet
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+/book
+
+# Environment
+.env
+
+# Testing
+/coverage
